@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from accounts.models import profile
@@ -23,4 +23,16 @@ def search_view(request,category):
        quizzes=Quiz.objects.order_by('-created_at')
 
     context={"user_profile" : user_profile,"quizzes" : quizzes,"categories":categories}
-    return render(request,'all-quiz.html,context',context)
+    return render(request,'all-quiz.html',context)
+@login_required(login_url='login')
+def quiz_view(request,quiz_id):
+    user_object=User.objects.get(username=request.user)
+    user_profile=profile.objects.get(user=user_object)
+    quiz=Quiz.objects.filter(id=quiz_id).first()
+    if quiz != None:
+        context={"user_profile":user_profile,"quiz":quiz}
+    else :
+        return redirect('all_quiz')
+    
+    
+    return render(request,'quiz.html',context)
