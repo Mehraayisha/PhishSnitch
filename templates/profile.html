@@ -20,8 +20,11 @@
             <div class="col-12">
                 <h2>{{user_profile2.full_name}}</h2>
                 <p class="fs-5">{{user_profile2.gender}}</p>
-                <p class="fs-5">{{user_profile2.location}}</p>
-                <p class="fs-5">{{user_profile2.bio}}</p>
+                <p class="fs-5"><i class="bi bi-geo-alt-fill"></i> {{user_profile2.location}}</p>
+                <p class="fs-5"><i class="bi bi-file-person"></i> {{user_profile2.bio}}</p>
+                {% if request.user.is_superuser %}
+                <p class="fs-5"><i class="bi bi-envelope-at"></i> <a href=" mailto:{{user_profile2.user.email}}">        {{user_profile2.user.email|default:'Email Not Available'}}</a></p>
+                {% endif %}
             </div>
         </div>
         </div>
@@ -36,34 +39,19 @@
                             <th scope="col">#</th>
                             <th scope="col">Quiz</th>
                             <th scope="col">Score</th>
-                            <th scope="col">Time</th>
+                             <th scope="col">Time</th>
                           </tr>
                         </thead>
                         <tbody>
+                          {% for submission in submissions %}
                           <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td title="{{submission.quiz.title}}">{{submission.quiz.title|truncatewords:4}}</td>
+                            <td>{{submission.score}}/{{submission.quiz.question_set.all|length}}</td>
+                            
+                            <td>{{submission.submitted_at|timesince}} ago</td>
                           </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>@social</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">4</th>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>@social</td>
-                          </tr>
+                          {% endfor%}
                         </tbody>
                       </table>
                 </div>

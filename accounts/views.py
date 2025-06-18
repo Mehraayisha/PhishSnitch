@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.models import User,auth
-from .models import profile
+from .models import Profile
 from django.contrib.auth.decorators import login_required
+from quiz.models import QuizSubmission
 # Create your views here.
 def register(request):
     if request.user.is_authenticated:
-        if request.user.is_superuser or not profile.objects.filter(user=request.user).exists():
+        if request.user.is_superuser or not Profile.objects.filter(user=request.user).exists():
             auth.logout(request)
         else:
             return redirect('profile', request.user.username)
@@ -31,7 +32,7 @@ def register(request):
                 user_login=auth.authenticate(username=username,password=password)
                 auth.login(request,user_login)
                 user_model=User.objects.get(username=username)
-                new_profile=profile.objects.create(user=user_model)
+                new_profile=Profile.objects.create(user=user_model)
                 new_profile.save()
                 return redirect('profile',user_model.username)
 
@@ -45,16 +46,17 @@ def register(request):
 @login_required(login_url='login')
 def userprofile(request,username):
     user_object2=User.objects.get(username=username)
-    user_profile2=profile.objects.get(user=user_object2)
+    user_profile2=Profile.objects.get(user=user_object2)
     user_object=User.objects.get(username=request.user)
-    user_profile=profile.objects.get(user=user_object)
+    user_profile=Profile.objects.get(user=user_object)
+    submissions=QuizSubmission.objects.filter(user=user_object2)
 
-    context={"user_profile" : user_profile,"user_profile2": user_profile2}
+    context={"user_profile" : user_profile,"user_profile2": user_profile2,"submissions":submissions}
     return render(request,'profile.html',context)
 @login_required(login_url='login')
 def editprofile(request):
     user_object =User.objects.get(username=request.user)
-    user_profile=profile.objects.get(user=user_object)
+    user_profile=Profile.objects.get(user=user_object)
     if request.method=="POST":
        #img
        if request.FILES.get('profile_image') != None:
@@ -100,7 +102,7 @@ def editprofile(request):
 @login_required(login_url='login')
 def deleteprofile(request):
     user_object =User.objects.get(username=request.user)
-    user_profile=profile.objects.get(user=user_object)
+    user_profile=Profile.objects.get(user=user_object)
     if request.method=="POST":
         user_profile.delete()
         user_object.delete()
@@ -112,27 +114,22 @@ def deleteprofile(request):
 
 def login(request):
     if request.user.is_authenticated:
-        # If user is superuser or profile doesn't exist, stay on login page
-        if request.user.is_superuser or not profile.objects.filter(user=request.user).exists():
-            auth.logout(request)
-        else:
-            return redirect('profile', request.user.username)
+        return redirect('profile', request.user.username)
 
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        username = request.POST['username']
+        password = request.POST['password']
+
         user = auth.authenticate(username=username, password=password)
+
         if user is not None:
-            if user.is_superuser:
-                messages.error(request, "Superuser cannot login here.")
-                return redirect('login')
             auth.login(request, user)
             return redirect('profile', username)
         else:
-            messages.info(request, "Credentials invalid")
+            messages.info(request, 'Credentials Invalid!')
             return redirect('login')
 
-    return render(request, 'login.html')
+    return render(request, "login.html")
 
 @login_required(login_url='login')
 def logout(request):

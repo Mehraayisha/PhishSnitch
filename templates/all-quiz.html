@@ -7,7 +7,7 @@
              <a href="{% url 'all_quiz' %}" class="btn btn-sm btn-light m-2">All Quiz</a>
              {% for category in categories%}
                      <a class="btn btn-sm btn-light m-2" href="{% url 'search' category.name %}">{{category.name}}</a>
-              {% endfor %}
+             {% endfor %}
         </div>
       </div>
       <form class="container d-flex" role="search">

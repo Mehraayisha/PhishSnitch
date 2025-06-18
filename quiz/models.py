@@ -3,7 +3,7 @@ import pandas as pd
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from django.db.models import sum
+from django.db.models import Sum
 
 
 class Category(models.Model):
@@ -46,6 +46,9 @@ class Choice(models.Model):
 
     def __str__(self):
         return f"{self.question.text[:50]}, {self.text[:20]}"
+    
+
+
 @receiver(post_save, sender=Quiz)
 def import_quiz_after_save(sender, instance, created, **kwargs):
     if instance.quiz_file:
@@ -71,13 +74,18 @@ def import_quiz_after_save(sender, instance, created, **kwargs):
 
         except Exception as e:
             print("Error while importing quiz:", e)
+
+
+
 class QuizSubmission(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     quiz=models.ForeignKey(Quiz,on_delete=models.CASCADE)
     score=models.IntegerField()
-    submission=models.DateTimeField(auto_now_add=True)
+    submitted_at=models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.user},{self.quiz.title}"
+    
+
     
 class UserRank(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
@@ -92,11 +100,8 @@ def updated_leaderboard(sender,instance,created,**kwargs):
 
 
 
-
-
-
 def update_leaderboard():
-    user_scores=(QuizSubmission.objects.values('user').annotate(total_score=sum('score')).order_by('-total_score')) 
+    user_scores=(QuizSubmission.objects.values('user').annotate(total_score=Sum('score')).order_by('-total_score')) 
     rank=1
     for entry in user_scores:
         user_id=entry['user']
