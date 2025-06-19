@@ -95,12 +95,12 @@
                     </thead>
                     <tbody>
                         {% for message in messages %}
-                        <tr class="table-active">
+                        <tr class="{% if not message.is_read %}table-light{% else %}table-active{% endif %}">
                             <th scope="row">{{forloop.counter}}</th>
                             <td><a href="{% url 'profile' message.user.username %}">{{message.user.username}}</a></td>
                             <td>{{message.subject}}</td>
                             <td>{{message.created_at}}</td>
-                            <td><a href="" class="btn btn-sm btn-primary">Open</a></td>
+                            <td><a href="{% url 'message' message.id %}" class="btn btn-sm btn-primary">Open</a></td>
                         </tr>
                         {% endfor %}
                         

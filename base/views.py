@@ -1,11 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from accounts.models import Profile
 from quiz.models import UserRank,Quiz,QuizSubmission,Question
 from django.contrib.auth.decorators import login_required,user_passes_test
 import datetime
 import math
-from .models import Message
+from django.db.models import Count,Q
+from .models import Message,Blog
+from django.contrib import messages
+from django.db.models.functions import ExtractYear
+
 
 def home(request):
     leaderboard_users=UserRank.objects.order_by('rank')[:3]
@@ -74,29 +78,52 @@ def about_view(request):
         context={}
     return render(request,'about.html',context)
 def blogs_view(request):
+    year_blog_count=Blog.objects.annotate(year=ExtractYear('created_at')).values('year').annotate(count=Count('id')).order_by('-year').filter(status='public')
+    blogs=Blog.objects.filter(status='public').order_by('-created_at')
     if request.user.is_authenticated:
        user_object=User.objects.get(username=request.user)
        user_profile=Profile.objects.get(user=user_object)
-       context={"user_profle":user_profile}
+       context={"user_profle":user_profile,"year_blog_count":year_blog_count,"blogs":blogs}
     else:
-        context={}
+        context={"blogs":blogs,"year_blog_count":year_blog_count}
     return render(request,'blogs.html',context)
 @login_required(login_url='login')
 def blog_view(request,blog_id):
     
     user_object=User.objects.get(username=request.user)
     user_profile=Profile.objects.get(user=user_object)
-    context={"user_profle":user_profile}
+    blog=Blog.objects.filter(id=blog_id).first()
+    context={"user_profle":user_profile,"blog":blog}
     
     return render(request,'blog.html',context)
 def contact_view(request):
-    if request.user.is_authenticated:
-       user_object=User.objects.get(username=request.user)
-       user_profile=Profile.objects.get(user=user_object)
-       context={"user_profle":user_profile}
-    else:
-        context={}
+    
+    user_object=User.objects.get(username=request.user)
+    user_profile=Profile.objects.get(user=user_object)
+    context={"user_profle":user_profile}
+    if request.method=='POST':
+         subject = request.POST.get('subject')
+         message = request.POST.get('message')
+         if subject is not None and message is not None :
+             form=Message.objects.create(user=request.user,subject=subject,message=message)
+             messages.success(request,"We got your message.We will resolve your query soon.")
+             return redirect('profile',request.user.username)
+         else:
+             return redirect('contact')
+
     return render(request,'contact.html',context)
+@user_passes_test(is_superuser)
+@login_required(login_url='login')
+def message_view(request,id):
+    user_object=User.objects.get(username=request.user)
+    user_profile=Profile.objects.get(user=user_object)
+    message=Message.objects.filter(id=int(id)).first()
+    if not message.is_read:
+        message.is_read=True
+        message.save()
+
+    context={"user_profile":user_profile,"message":message}
+    return render(request,"message.html",context)
 def terms_conditions_view(request):
     if request.user.is_authenticated:
        user_object=User.objects.get(username=request.user)
@@ -113,3 +140,19 @@ def downloads_view(request):
     else:
         context={}
     return render(request,'downloads.html',context)
+def search_users_view(request):
+    query=request.GET.get('q')
+    if query:
+        users=User.objects.filter(
+            Q(username__icontains=query)| Q(first_name__icontains=query)| Q(last_name__icontains=query)
+        ).order_by('date_joined')
+    else:
+        users=[]
+    if request.user.is_authenticated:
+       user_object=User.objects.get(username=request.user)
+       user_profile=Profile.objects.get(user=user_object)
+       context={"user_profle":user_profile,"query":query,"users":users}
+    else:
+        context={"query":query,"users":users}
+    
+    return render(request,"search-user.html",context)
