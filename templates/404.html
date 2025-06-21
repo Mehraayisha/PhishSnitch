@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block title %}@{{request.user.username}}404 Not Found{% endblock title %}
+
+{% block content %}
+<style>
+    h1{
+        margin:100px 0;
+        font-size :100px;
+        color:lightcoral;
+    }
+</style>
+<div class="container my-5">
+    <h1 class="text-center ">
+        404 Not found
+    </h1>
+    <p class="text-center">
+    <a href="{% url 'home' %}" class="text-center btn btn-primary">go to home</a>
+    </p>
+</div>
+
+{% endblock content %}

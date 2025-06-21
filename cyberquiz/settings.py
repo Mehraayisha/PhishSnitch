@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-a=zjj7z36fq4#+grsjiy_()hkl!&-o!pe5*w*4mllmrsvq&ioy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1","localhost"]
 
 
 # Application definition
@@ -74,7 +74,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'cyberquiz.wsgi.application'
-
+LOGIN_URL='login'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

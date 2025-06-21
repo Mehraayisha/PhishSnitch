@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User,auth
 from .models import Profile
@@ -43,20 +43,19 @@ def register(request):
     context={}
     return render(request,"register.html",context)
 
-@login_required(login_url='login')
+@login_required 
 def userprofile(request,username):
-    user_object2=User.objects.get(username=username)
-    user_profile2=Profile.objects.get(user=user_object2)
-    user_object=User.objects.get(username=request.user)
-    user_profile=Profile.objects.get(user=user_object)
+    user_object2=get_object_or_404(User,username=username)
+    user_profile2=get_object_or_404(Profile,user=user_object2)
+    
     submissions=QuizSubmission.objects.filter(user=user_object2)
 
-    context={"user_profile" : user_profile,"user_profile2": user_profile2,"submissions":submissions}
+    context={"user_profile2": user_profile2,"submissions":submissions}
     return render(request,'profile.html',context)
-@login_required(login_url='login')
+@login_required 
 def editprofile(request):
-    user_object =User.objects.get(username=request.user)
-    user_profile=Profile.objects.get(user=user_object)
+    user_object=request.user
+    user_profile=request.user.profile
     if request.method=="POST":
        #img
        if request.FILES.get('profile_image') != None:
@@ -64,7 +63,7 @@ def editprofile(request):
            user_profile.save()
        #email
        if request.POST.get('email')!=None:
-           U=User.objects.filter(email=request.POST.get('email')).first()
+           U=get_object_or_404(User,email=request.POST.get('email'))
            if U == None:
                user_object.email=request.POST.get('email')
                user_object.save()
@@ -74,7 +73,7 @@ def editprofile(request):
                    return redirect('edit_profile')
          #username      
        if request.POST.get('username')!=None:
-           U=User.objects.filter(username=request.POST.get('username')).first()
+           U=get_object_or_404(User,username=request.POST.get('username'))
            if U == None:
                user_object.username=request.POST.get('username')
                user_object.save()
@@ -99,10 +98,10 @@ def editprofile(request):
     context={"user_profile":user_profile}
     return render(request,'profile-edit.html',context)
 
-@login_required(login_url='login')
+@login_required 
 def deleteprofile(request):
-    user_object =User.objects.get(username=request.user)
-    user_profile=Profile.objects.get(user=user_object)
+    user_object=request.user
+    user_profile=request.user.profile(user=user_object)
     if request.method=="POST":
         user_profile.delete()
         user_object.delete()
@@ -131,7 +130,7 @@ def login(request):
 
     return render(request, "login.html")
 
-@login_required(login_url='login')
+@login_required 
 def logout(request):
     auth.logout(request)
     return redirect('login')

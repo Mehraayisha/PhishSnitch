@@ -1,27 +1,50 @@
-{% extends 'index.html' %}
-{% block title %}{{quiz.title}}- PHISHSNITCH{% endblock title%}
+{% extends 'index.html'%}
+{% load custom_filters %}
+{% block title %}Result for {{submission.quiz.title}}
+{% endblock title %}
 {% block content %}
-<style>
-  .questions{
+    <style>
+        .result-card {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .result-card .card-body {
+            padding: 1.5rem;
+        }
+        .questions{
             user-select: none;
         }
-</style>
-      <h1 class="display-4 text-center my-5">{{quiz.category}} - {{quiz.title}}</h1>
-      
-      <p class="fs-5 text-center container">{{quiz.description}}</p>
-      <div class="container">
-        <div class="d-flex justify-content-between">
-          <span class="fs-5">{{quiz.created_at}}</span>
-            <span class="fs-5" id="timer">10:00</span>
-        </div>
-        {% for message in messages %}
-        <div id="message-div">
-          <h4 class="text-center text-success">{{message}}</h4>
-        </div>
-        {% endfor %}
+    </style>
+</head>
 
-        <div class="questions">
-          {% for question in quiz.question_set.all %}
+<body>
+    <div class="container my-5">
+        <div class="result-card">
+            <div class="card shadow">
+                <div class="card-header text-center bg-primary text-white">
+                    <h5>Quiz Result Summary</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Name:</strong> {{submission.user.profile.full_name}}</p>
+                    <hr>
+                    <p><strong>Quiz:</strong> {{ submission.quiz.title|title }}</p>
+                    <p><strong>Total Questions:</strong> {{submission.quiz.question_set.count}}</p>
+                    <p><strong>Total Correct Answers:</strong> {{submission.score}}</p>
+                    <p><strong>Total incorrect Answers:</strong> {{submission.quiz.question_set.count|subtract:submission.score }}</p>
+                    <p><strong>Submitted At:</strong> {{submission.submitted_at|timesince }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'all_quiz' %}" class="btn btn-primary">All Quiz</a>
+                    <a href="{% url 'quiz' submission.quiz.id  %}" class="btn btn-primary">Retake</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+     <div class="questions my-4">
+          {% for question in submission.quiz.question_set.all %}
             <div class="card mb-3 question">
                 <div class="card-header fw-bold">
                   Question-{{ forloop.counter}}
@@ -31,7 +54,7 @@
                     {% for option in question.choice_set.all %}
                     <div class="form-check">
                         <label class="form-check-label"  for="{{option.id}}">
-                        <input class="form-check-input" 
+                        <input class="form-check-input" disabled {%if option.is_correct %}checked{% endif %}
                         type="radio" name="{{option.question.id}}" id="{{option.id}}" value="{{option.text}}">
                           {{option.text}}
                         </label>
@@ -47,7 +70,7 @@
         <form action="" method="post" id="quiz-form">
           {% csrf_token %}
         <input type="hidden" name="score" value="0" id="user-score">
-        <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
+        
         </form>
       </div>
      
@@ -122,7 +145,4 @@
        quizTimerId=setInterval(updateTimer,1000);
      </script> 
 
-     
-
-
-     {% endblock content %}
+   {% endblock content %}
