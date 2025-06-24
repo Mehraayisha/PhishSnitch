@@ -1,44 +1,69 @@
 {% extends 'index.html' %}
 {% block title %} login page - phishsnitch {% endblock title %}
 {% block content %}
-      <h1 class="display-4 text-center my-5">Login</h1>
-      <div class="container ">
-        <div class="row row-cols-sm-1 row-cols-lg-3 container">
-            <div class="col-12">
-             
-            </div>
-            <div class="col-12">
-              <div>
-                {% for message in messages %}
-                   <h5 class="text-danger"> {{message}}</h5>
-                {% endfor %}
-              </div>
-                <form method="POST" action="">
-                  {%  csrf_token %}
-                    <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Username</label>
-                      <input type="username" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-                    </div>
-                    <div class="mb-3 form-check">
-                      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                      <label class="form-check-label" for="exampleCheck1">Remember me</label>
-                    </div>
-                    <p>New here?<a href="{% url 'register' %}">Register</a></p>
-                    <div class="text-center">
-                    <button type="submit" class="btn btn-primary ">Submit</button>
-                </div>
-                  </form>
-            </div>
-            <div class="col-12">
-              
-            </div>
-          </div>
+{% load static %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
 
+  .responsive-bg {
+    background-image: url("{% static 'images/loginbg.jpg' %}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .glass-card {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    width: 100%;
+    max-width: 500px;
+    color: #fff;
+  }
+</style>
+
+<div class="responsive-bg">
+  <div class="glass-card mt-5 mx-3 mx-md-4">
+    <h1 class="text-center mb-4">Login</h1>
+
+    {% for message in messages %}
+      <h5 class="text-danger text-center"> {{ message }}</h5>
+    {% endfor %}
+
+    <form method="POST" action="">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="exampleInputEmail1">
+        <div id="emailHelp" class="form-text text-light">We'll never share your email with anyone else.</div>
       </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+      </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Remember me</label>
+      </div>
+      <p>New here? <a href="{% url 'register' %}" class="text-info">Register</a></p>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary px-4">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
 
-      {% endblock content %}
+{% endblock content %}

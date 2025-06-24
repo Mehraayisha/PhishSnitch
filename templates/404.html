@@ -1,22 +1,79 @@
 {% extends 'index.html' %}
+{% load static %}
 
-{% block title %}@{{request.user.username}}404 Not Found{% endblock title %}
+{% block title %}404 Not Found{% endblock %}
 
 {% block content %}
 <style>
-    h1{
-        margin:100px 0;
-        font-size :100px;
-        color:lightcoral;
-    }
-</style>
-<div class="container my-5">
-    <h1 class="text-center ">
-        404 Not found
-    </h1>
-    <p class="text-center">
-    <a href="{% url 'home' %}" class="text-center btn btn-primary">go to home</a>
-    </p>
-</div>
+  body {
+    background-color: #22202c;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x: hidden;
+  }
 
-{% endblock content %}
+  .glitch {
+    font-size: 8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+    animation: glitch 1s infinite;
+    color: #00ffcc;
+  }
+
+  @keyframes glitch {
+    0% { text-shadow: 2px 2px red; }
+    20% { text-shadow: -2px 0 blue; }
+    40% { text-shadow: 2px -2px green; }
+    60% { text-shadow: -2px 2px yellow; }
+    80% { text-shadow: 2px 0 magenta; }
+    100% { text-shadow: 0 0 white; }
+  }
+
+  .glitch-box {
+    text-align: center;
+    padding: 100px 20px;
+  }
+
+  .desc {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    color: #bbb;
+  }
+
+  .btn-home {
+    margin-top: 2rem;
+    padding: 0.75rem 2rem;
+    background-color: #00ffcc;
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s;
+  }
+
+  .btn-home:hover {
+    background-color: #00ccaa;
+    color: #000;
+  }
+
+  @media (max-width: 576px) {
+    .glitch {
+      font-size: 4rem;
+    }
+    .desc {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<div class="glitch-box">
+  <div class="glitch">404</div>
+  <h2 class="mt-4">Intrusion Detected!</h2>
+  <p class="desc">Looks like you've wandered off the secure network.  
+  <br />This page is either encrypted, deleted or never existed.</p>
+  <a href="{% url 'home' %}" class="btn-home">Return to Safe Zone</a>
+</div>
+{% endblock %}

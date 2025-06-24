@@ -193,7 +193,7 @@
                 <h1 class="custom-heading display-5 fw-bold my-2 text-white">Welcome To PhishSnitch</h1>
                 <p class="text-white fs-4">Spot the thread. Stop the scam. Stay secure</p>
                 <div class=" d-inline-flex gap-2 mb-5">
-                    <a href="{% url 'all_quiz' %}" class="btn btn-outline-light align-item-center btn-lg px-4 rounded-pill" type="button">
+                    <a href="{% url 'category_view' %}" class="btn btn-outline-light align-item-center btn-lg px-4 rounded-pill" type="button">
                         Take A Quiz  
                     </a>
                     {% if not request.user.is_authenticated %}

@@ -1,31 +1,64 @@
 {% extends 'index.html' %}
 {% block title %} About Us {% endblock title%}
 {% block content %}
-<h1 class="display-4 text-center my-5">About Us</h1>
 
-    <main>
-        <div class="container col-md-8 col-sm-12">
-            <section class="app-description">
-                <h2>Welcome to PhishSnitch</h2>
-                <p>
-                    PhishSnitch is an exciting web app that brings you the latest and hottest quiz topics in the world of
-                    technology.
-                    Sign up now to challenge your knowledge, learn new things, and have fun with our engaging quizzes.
-                </p>
-            </section>
+   
+            <section class="py-5 " style="background-color: #1e2a38; color: #f8f9fa;">
+  <div class="container ">
+    <h1 class="display-4 fw-bold text-center mb-4 mt-5" style="color: #5fd3f3;">About PhishSnitch</h1>
+    <p class="lead text-center mb-5" style="color: #cdd4e0;">
+      Empowering users to recognise and respond to phishing attacks before they strike.
+    </p>
 
-            <section class="how-it-works">
-                <h2>How It Works</h2>
-                <p>
-                    PhishSnitch offers a simple and intuitive user interface that allows you to:
-                </p>
-                <ul>
-                    <li>Sign up and create your personalized account.</li>
-                    <li>Choose from a variety of trending quiz topics in the technology domain.</li>
-                    <li>Participate in time-limited quizzes and answer questions to rank yourself on PhishSnitch.</li>
-                    <li>Track your progress and compete with other tech enthusiasts on the leaderboard.</li>
-                </ul>
-            </section>
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="p-4 rounded" style="background-color: #253446;">
+          <h3 class="fw-semibold mb-3" style="color: #9cdcf7;">🔍 What is PhishSnitch?</h3>
+          <p style="color: #d4e1ec;">
+            PhishSnitch is an interactive cybersecurity education platform designed to enhance your awareness of phishing and social engineering attacks. Through scenario-based quizzes and bite-sized learning, we help you build a human firewall against the most common threats on the internet.
+          </p>
         </div>
-    </main>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="p-4 rounded" style="background-color: #253446;">
+          <h3 class="fw-semibold mb-3" style="color: #9cdcf7;">🎯 Our Mission</h3>
+          <p style="color: #d4e1ec;">
+            In a world where cyber threats evolve daily, our mission is to bridge the gap between technical defences and user awareness. We aim to make cybersecurity knowledge accessible, engaging, and actionable for everyone—from beginners to tech-savvy users.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-6 mb-4">
+        <div class="p-4 rounded" style="background-color: #253446;">
+          <h3 class="fw-semibold mb-3" style="color: #9cdcf7;">🧠 How It Works</h3>
+          <ul class="text-light">
+            <li>Pick a category (e.g., Email Phishing, Vishing, or Malware).</li>
+            <li>Take a quick quiz to test your instincts and learn from your choices.</li>
+            <li>Track your progress and revisit questions you missed.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="p-4 rounded" style="background-color: #253446;">
+          <h3 class="fw-semibold mb-3" style="color: #9cdcf7;">🔒 Why It Matters</h3>
+          <p style="color: #d4e1ec;">
+            90% of cyber breaches begin with human error. PhishSnitch focuses on turning the average user into an aware one. Because in cybersecurity, <strong>knowledge is your best defence.</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="{% url 'category_view' %}" class="btn btn-lg px-4" style="background-color: #5fd3f3; color: #1e2a38; font-weight: bold; border-radius: 25px;">
+        🚀 Start Learning
+      </a>
+    </div>
+  </div>
+</section>
+
+       
     {% endblock content %}

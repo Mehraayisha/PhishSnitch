@@ -1,58 +1,83 @@
-{%  extends 'index.html' %}
-{% block title %} register page - phishsnitch {% endblock title %}
-{%  block content %}
-    
-      <h1 class="display-4 text-center my-5">Register</h1>
-      <div class="container ">
-        <div class="row row-cols-sm-1 row-cols-lg-3 container">
-            <div class="col-12">
-             
-            </div>
-            <div class="col-12">
-              <div>
-                {% for message in messages %}
-                <h5 class="text-danger">
-                   {{message}}
-                </h5>
-                {% endfor %}
-              </div>
-                <form method="POST" action="">
-                  {%  csrf_token %}
-                    <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Email</label>
-                      <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Username</label>
-                        <input type="username" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                      </div>
-                    <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label">Password</label>
-     
-                      <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
-                        <input type="password" name="password2" class="form-control" id="exampleInputPassword1" required>
-                      </div>
-                    <div class="mb-3 form-check">
-                      <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
-                      <label class="form-check-label" for="exampleCheck1"><a href="{% url 'terms_and_conditions' %}">Terms & Conditions</a></label>
-                    </div>
-                    <p>Already a user?<a href="{% url 'login' %}">Login</a></p>
-                    <div class="text-center">
-                    <button type="submit" class="btn btn-primary ">Submit</button>
-                    
-                </div>
-                
-                  </form>
-            </div>
-            <div class="col-12">
-              
-            </div>
-          </div>
+{% extends 'index.html' %}
+{% block title %} Register - PhishSnitch {% endblock title %}
+{% load static %}
+{% block content %}
 
+<style>
+  .responsive-bg {
+    background-image: url("{% static 'images/loginbg.jpg' %}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+     padding-top: 100px; /* 👈 adds space below navbar */
+  padding-bottom: 60px; 
+  }
+
+  .glass-card {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2.5rem;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    width: 100%;
+    max-width: 550px;
+    margin: 2rem;
+  }
+</style>
+
+<div class="responsive-bg">
+  <div class="glass-card ">
+    <h1 class="display-5 text-center text-white mb-4 ">Register</h1>
+
+    {% for message in messages %}
+      <h5 class="text-danger text-center">{{ message }}</h5>
+    {% endfor %}
+
+    <form method="POST" action="">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="email" class="form-label text-white">Email</label>
+        <input type="email" name="email" class="form-control" id="email" required>
       </div>
-     {% endblock content %}
+
+      <div class="mb-3">
+        <label for="username" class="form-label text-white">Username</label>
+        <input type="text" name="username" class="form-control" id="username" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label text-white">Password</label>
+        <input type="password" name="password" class="form-control" id="password" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password2" class="form-label text-white">Confirm Password</label>
+        <input type="password" name="password2" class="form-control" id="password2" required>
+      </div>
+
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="terms" required>
+        <label class="form-check-label text-white" for="terms">
+          I agree to the <a href="{% url 'terms_and_conditions' %}" class="text-info">Terms & Conditions</a>
+        </label>
+      </div>
+
+      <p class="text-white">Already a user? <a href="{% url 'login' %}" class="text-info">Login</a></p>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary px-5">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}
