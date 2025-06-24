@@ -1,30 +1,505 @@
 {% extends 'index.html' %}
 {% block title %}Leaderboard-phishsnitch{% endblock title %}
 {% block content %}
-<div class="container text-center">
-    <h1 class="display-4 text-center my-5">
-        LeaderBoard
-    </h1>
-    <div class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 mx-3">
-        {% if leaderboard_users|length == 0 %}
-        <div class="col-lg-4 position-relative mb-4">
-        <h4 class="text-center text-danger">
-           No user vailable on leaderboard
-        </h4>
-        </div>
-        {% else %}
-        {% for rank in leaderboard_users %}
-         <div class="col-lg-4 position-relative mb-4"> 
-            <img src="{{rank.user.profile.profile_image.url}}" class="img-fluid" width="140" height="140" alt="user-profile"> 
-            <span class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger">{{forloop.counter}}</span>
-            <h2 class="fw-normal">{{rank.user.username}}</h2> 
-            <p>{{rank.user.profile.bio|truncatewords:5}}</p> 
-            <p><a class="btn btn-secondary" href="{% url 'profile' rank.user.username %}">View Profile »</a></p> 
-         </div>
-         {% endfor %}
-        {% endif %}
+{% load static%}
+<style>
+    .responsive-bg {
+    background-image: url("{% static 'images/bg2.jpg' %}");
+    background-size: cover;
+    
+    background-repeat: no-repeat;
+    display: flex;
+   flex-direction: column;
+   background-position: center center;   
+   background-attachment: fixed;
+   margin: 0;
+   padding: 0;
+   overflow: hidden;
+   position: relative;
+   flex: 1 0 auto;
+  }
 
+
+
+  .pedestal-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            text-align: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+        
+        .pedestal {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+        
+        .pedestal-base {
+            background: linear-gradient(to right, #f0f0f0, #e0e0e0);
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        
+        .first-place {
+            height: 180px;
+            background: linear-gradient(to right, #ffd700, #daa520);
+        }
+        
+        .second-place {
+            height: 140px;
+            background: linear-gradient(to right, #c0c0c0, #a0a0a0);
+        }
+        
+        .third-place {
+            height: 100px;
+            background: linear-gradient(to right, #cd7f32, #a05a2c);
+        }
+        
+        .pedestal-label {
+            background-color: #333;
+            color: white;
+            padding: 5px 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+         
+        .prize-spot {
+            width: 50px;
+            height: 50px;
+            
+            background-color: white;
+            border-radius: 50%;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+        .prize-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+        
+        @media (min-width: 576px) {
+            .pedestal {
+                min-width: 100px;
+            }
+            .prize-spot {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            .pedestal-label {
+                font-size: 1rem;
+                padding: 5px 10px;
+            }
+            .prize-image {
+        width: 60px;
+        height: 60px;
+    }
+        }
+        
+        @media (min-width: 768px) {
+            .pedestal {
+                min-width: 120px;
+            }
+            .first-place {
+                height: 200px;
+            }
+            .second-place {
+                height: 160px;
+            }
+            .third-place {
+                height: 120px;
+            }
+            .prize-spot {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+             .prize-image {
+        width: 80px;
+        height: 80px;
+    }
+        }
+        
+        @media (min-width: 992px) {
+            .pedestal {
+                min-width: 150px;
+            }
+            .first-place {
+                height: 220px;
+            }
+            .second-place {
+                height: 180px;
+            }
+            .third-place {
+                height: 140px;
+            }
+        }
+         .left-content {
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            padding: 2rem;
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .pedestal-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            text-align: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .pedestal {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+        
+        .pedestal-base {
+            background-color: rgba(0, 0, 0, 0.3); /* Changed to transparent black */
+            backdrop-filter: blur(5px); /* Added glass effect */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Matching border */
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .first-place {
+            height: 180px;
+             background: linear-gradient(to bottom, 
+        rgba(255, 215, 0, 0.6), 
+        rgba(218, 165, 32, 0.4));
+        }
+        
+        .second-place {
+            height: 140px;
+            background: linear-gradient(to bottom, 
+        rgba(192, 192, 192, 0.6), 
+        rgba(160, 160, 160, 0.4));
+        }
+        
+        .third-place {
+            height: 100px;
+            background: linear-gradient(to bottom, 
+        rgba(205, 127, 50, 0.6), 
+        rgba(160, 90, 44, 0.4)); /
+        }
+        
+        .pedestal-label {
+            background-color: rgba(0, 0, 0, 0.4); /* Darker transparent bg */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 5px 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .prize-spot {
+            width: 50px;
+            height: 50px;
+             background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+            backdrop-filter: blur(5px); /* Glass effect */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            color: white;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        @media (min-width: 576px) {
+            .pedestal {
+                min-width: 100px;
+            }
+            .prize-spot {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            .pedestal-label {
+                font-size: 1rem;
+                padding: 5px 10px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .pedestal {
+                min-width: 120px;
+            }
+            .first-place {
+                height: 200px;
+            }
+            .second-place {
+                height: 160px;
+            }
+            .third-place {
+                height: 120px;
+            }
+            .prize-spot {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .pedestal {
+                min-width: 150px;
+            }
+            .first-place {
+                height: 220px;
+            }
+            .second-place {
+                height: 180px;
+            }
+            .third-place {
+                height: 140px;
+            }
+        }
+</style>
+<div class="responsive-bg">
+
+
+       <div class="container py-5 ">
+    <div class="row justify-content-center mt-5">
+        <div class="col-lg-8">
+            <div class="left-content ">
+                <h2 class="text-center mb-4">Winners Podium</h2>
+                <div class="pedestal-container">
+                    <!-- Second Place -->
+                    <div class="pedestal">
+                        <div class="pedestal-base second-place">
+                            <div class="prize-spot">
+                                {% if leaderboard_users.1 %}
+                                 <a href="{% url 'profile' leaderboard_users.1.user.username %}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{leaderboard_users.1.user.username}}" >
+                                <img src="{{ leaderboard_users.1.user.profile.profile_image.url }}" 
+                                     alt="Second place" 
+                                     class="prize-image rounded-circle border border-white"
+                                     style="border-width: 2px;">
+                                     </a>
+                                {% else %}
+                               
+                                <img src="{% static 'images/default-profile.png' %}" 
+                                     alt="No second place" 
+                                     class="prize-image rounded-circle border border-white"
+                                     style="border-width: 2px;">
+                                     
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="pedestal-label">
+                            {% if leaderboard_users.1 %}{{ leaderboard_users.1.user.username }}{% else %}Second{% endif %}
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- First Place -->
+                    <div class="pedestal">
+                        <div class="pedestal-base first-place">
+                            <div class="prize-spot">
+                                {% if leaderboard_users.0 %}
+                                <a href="{% url 'profile' leaderboard_users.0.user.username %}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{leaderboard_users.0.user.username}}" >
+                                <img src="{{ leaderboard_users.0.user.profile.profile_image.url }}" 
+                                     alt="First place" 
+                                     class="prize-image rounded-circle border border-white"
+                                     style="border-width: 2px;">
+                                     </a>
+                                {% else %}
+                                <img src="{% static 'images/default-profile.png' %}" 
+                                     alt="No first place" 
+                                     class="prize-image rounded-circle border border-white"
+                                     style="border-width: 2px;">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="pedestal-label">
+                            {% if leaderboard_users.0 %}{{ leaderboard_users.0.user.username }}{% else %}First{% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Third Place -->
+                    <div class="pedestal">
+                        <div class="pedestal-base third-place">
+                            <div class="prize-spot">
+                                {% if leaderboard_users.2 %}
+                                <a href="{% url 'profile' leaderboard_users.2.user.username %}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{leaderboard_users.2.user.username}}" >
+                                <img src="{{ leaderboard_users.2.user.profile.profile_image.url }}" 
+                                     alt="Third place" 
+                                     class="prize-image rounded-circle border border-white"
+                                     style="border-width: 2px;">
+                                     </a>
+                                {% else %}
+                                <img src="{% static 'images/default-profile.png' %}" 
+                                     alt="No third place" 
+                                     class="prize-image rounded-circle border border-white"
+                                     style="border-width: 2px;">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="pedestal-label">
+                            {% if leaderboard_users.2 %}{{ leaderboard_users.2.user.username }}{% else %}Third{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+
+
+
+
+
+
+
+        <div class="container">
+    <h1 class="display-4 text-center my-5" style="font-weight: 900;">LeaderBoard</h1>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            {% if leaderboard_users|length == 0 %}
+            <div class="text-center text-danger py-5">
+                <h4>No users available on leaderboard</h4>
+            </div>
+            {% else %}
+            <div class="leaderboard-list">
+                {% for rank in leaderboard_users %}
+                {% if forloop.counter >= 4 %}  {# Starting from 4th position #}
+                <div class="leaderboard-item d-flex align-items-center py-3 border-bottom">
+                    <div class="rank-number me-3" style="width: 40px; text-align: center;">
+                        <span class="fs-4 fw-bold">{{forloop.counter}}</span>
+                    </div>
+                    
+                   <p class="text-white text-center">Total leaderboard users: {{ leaderboard_users|length }}</p>
+
+                    <div class="user-avatar me-3">
+                        <a href="{% url 'profile' rank.user.username %}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{rank.user.username}}" >
+                        <img src="{{rank.user.profile.profile_image.url}}" 
+                             class="rounded-circle border" 
+                             width="50" 
+                             height="50" 
+                             alt="{{rank.user.username}}">
+                             </a>
+                    </div>
+                    <div class="user-info flex-grow-1">
+                        <h5 class="mb-0 fw-bold">{{rank.user.username}}</h5>
+                        <small class="text-muted">{{rank.user.profile.bio|truncatewords:5}}</small>
+                    </div>
+                    <div class="user-points ms-2">
+                        <span class="badge bg-secondary rounded-pill">{{rank.user.profile.total_score}}</span>
+                    </div>
+                    
+                </div>
+                {% endif %}
+                {% endfor %}
+                
+                {# Current user's rank (from your image example) #}
+                <div class="leaderboard-item d-flex align-items-center py-3 border-bottom">
+                    <div class="rank-number me-3" style="width: 40px; text-align: center;">
+                        <span class="fs-4 fw-bold">{{request.user.profile.rank}}</span>
+                    </div>
+                    <div class="user-avatar me-3">
+                        <img src="{{request.user.profile.profile_image.url}}" 
+                             class="rounded-circle border" 
+                             width="50" 
+                             height="50" 
+                             alt="{{request.user.username}}">
+                    </div>
+                    <div class="user-info flex-grow-1">
+                        <h5 class="mb-0 fw-bold">{{request.user.username}}</h5>
+                        <small class="text-muted">{{request.user.profile.bio|truncatewords:5}}</small>
+                    </div>
+                    <div class="user-points ms-2">
+                        <span class="badge bg-secondary rounded-pill">{{request.user.profile.total_score}}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .leaderboard-list {
+       
+        
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        padding: 2rem;
+        border-radius: 12px;
+        color: white;
+    }
+    
+    .leaderboard-item {
+        padding: 0.8rem 1.5rem;
+        transition: background-color 0.2s;
+    }
+    
+    .leaderboard-item:hover {
+        background-color: #39444f;
+    }
+    
+    .user-avatar img {
+        object-fit: cover;
+    }
+</style>
+
+
+
+
+
+
+
+
 
 </div>
+
+ 
 {% endblock content %}

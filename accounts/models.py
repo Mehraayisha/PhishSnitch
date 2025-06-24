@@ -13,7 +13,8 @@ class Profile(models.Model):
         ('Other','Other')
     )
     gender=models.CharField(max_length=6,choices=GENDER,blank=True,null=True)
-
+    rank=models.IntegerField(null=True,blank=True,editable=True,default=0)
+    total_score = models.IntegerField(default=0)
     def __str__(self):
         return self.user.username
     

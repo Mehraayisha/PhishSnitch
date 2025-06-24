@@ -40,7 +40,7 @@
             <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
           <li class="nav-item content">
-            <a class="nav-link" href="{% url 'all_quiz' %}">Quiz</a>
+            <a class="nav-link" href="{% url 'category_view' %}">Quiz</a>
           </li>
           {% if request.user.is_superuser %}
           <li class="nav-item content">
@@ -50,11 +50,11 @@
           <li class="nav-item content">
             <a class="nav-link" href="{%  url 'leaderboard' %}">LeaderBoard</a>
           </li>
-          <li class="nav-item dropdown content">
+          <li class="nav-item dropdown content " style="background-color: #292b38;">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Other
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" style="background-color: #292b38;">
               <li><a class="dropdown-item" href="{% url 'blogs' %}">Blog</a></li>
               <li><a class="dropdown-item" href="{% url 'about' %}">About</a></li>
               <li><hr class="dropdown-divider"></li>

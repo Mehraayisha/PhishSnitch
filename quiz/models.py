@@ -4,11 +4,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.db.models import Sum
-
+from accounts.models import Profile
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
-
+    image = models.ImageField(upload_to='category_images',null=True,blank=True,default='bg3.png')
     class Meta:
         verbose_name_plural = 'Categories'
 
@@ -20,6 +20,7 @@ class Quiz(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    
     quiz_file = models.FileField(upload_to='quiz/')
     created_at = models.DateTimeField(auto_now_add=True)
     uploaded_at = models.DateTimeField(auto_now=True)
@@ -100,16 +101,28 @@ def updated_leaderboard(sender,instance,created,**kwargs):
 
 
 
+
+
 def update_leaderboard():
-    user_scores=(QuizSubmission.objects.values('user').annotate(total_score=Sum('score')).order_by('-total_score')) 
-    rank=1
+    user_scores = (
+        QuizSubmission.objects
+        .values('user')
+        .annotate(total_score=Sum('score'))
+        .order_by('-total_score')
+    )
+
+    rank = 1
     for entry in user_scores:
-        user_id=entry['user']
-        total_score=entry['total_score']
-        user_rank, created=UserRank.objects.get_or_create(user_id=user_id)
-        user_rank.rank=rank
-        user_rank.total_score=total_score
-        user_rank.save()
+        user_id = entry['user']
+        total_score = entry['total_score']
 
-        rank +=1
+        profile, created = Profile.objects.get_or_create(user_id=user_id)
+        profile.total_score = total_score
+        profile.rank = rank
+        profile.save()
 
+        rank += 1
+
+    
+    
+    

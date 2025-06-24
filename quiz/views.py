@@ -44,3 +44,13 @@ def quiz_result_view(request,submission_id):
     submission=get_object_or_404(QuizSubmission,pk=submission_id)
     context={"submission":submission}
     return render(request,'quiz-result.html',context)
+
+def category_view(request):
+    query = request.GET.get("q", "")
+    if query:
+        categories = Category.objects.filter(name__icontains=query)
+    else:
+        categories = Category.objects.all()
+
+    context = {"categories": categories, "query": query}
+    return render(request, 'quiz_category.html', context)
