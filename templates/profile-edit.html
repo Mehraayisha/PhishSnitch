@@ -1,78 +1,142 @@
 {% extends 'index.html' %}
 
-{% block title %}{{request.user.username}} Profile Edit - BrainBunny{% endblock title %}
-
+{% block title %}{{ request.user.username }} Profile Edit - PhishSnitch{% endblock title %}
 {% block content %}
 
-  <h1 class="display-4 text-center my-5">Edit Profile</h1>
+<style>
+  body {
+    background-color: #1e2a38;
+    color: #eaeaea;
+  }
 
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
 
-  <div class="container">
-    <div class="row row-cols-sm-1 row-cols-lg-3 container">
-      <div class="col-12">
-      </div>
-      <div class="col-12">
+  .form-label {
+    font-weight: 500;
+    color: #eaeaea;
+  }
 
+  .form-control, .form-select {
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border: 1px solid #444;
+  }
 
-        <form action="" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-3 d-flex justify-content-center">
-                <img src="{{user_profile.profile_image.url}}" alt="profile-pic" width="150" height="150" class="rounded-circle">
-            </div>
+  .form-control::placeholder, .form-select option {
+    color: #bbb;
+  }
 
-            <div class="mb-3">
-                {% for message in messages %}
-                <h5 class="text-danger">{{message}}</h5>
-                {% endfor %}
-              </div>
-          <div class="mb-3">
-            <label for="exampleInputImage" class="form-label ">Profile Image</label>
-            <input type="file" name="profile_image" class="form-control" id="exampleInputImage">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputFirstName" class="form-label">First Name</label>
-            <input type="text" name="first_name" value="{{user_profile.user.first_name}}" class="form-control" id="exampleInputFirstName"  required>
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputLastName" class="form-label ">Last Name</label>
-            <input type="text" name="last_name" value="{{user_profile.user.last_name}}" class="form-control" id="exampleInputLastName"  required>
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail2" class="form-label">Email</label>
-            <input type="email" name="email" value="{{user_profile.user.email}}" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp"
-               required>
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Username</label>
-            <input type="text" name="username" value="{{user_profile.user.username}}" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp"
-               required>
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputLocation" class="form-label">Location</label>
-            <input type="text" name="location" value="{{user_profile.location}}" class="form-control" id="exampleInputLocation"  required>
-          </div>
-          
-          <div class="mb-3">
-            <label for="exampleInputGender" class="form-label">Gender</label>
-            <select class="form-select form-control" name="gender" id="exampleInputGender" aria-label="Default select example" required>
-                <option selected>Choose Your Gender</option>
-                <option {% if user_profile.gender == 'Male' %} selected{% endif %} value="Male">Male</option>
-                <option {% if user_profile.gender == 'Female' %} selected{% endif %} value="Female">Female</option>
-                <option {% if user_profile.gender == 'Other' %}  selected {% endif %} value="Other">Other</option>
-              </select>
-          </div>
+  .form-control:focus, .form-select:focus {
+    box-shadow: 0 0 10px rgba(95, 211, 243, 0.5);
+    border-color: #5fd3f3;
+  }
 
-          <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Your Bio</label>
-            <textarea class="form-control" name="bio" id="exampleFormControlTextarea1" rows="3" \ required>{{user_profile.bio}}</textarea>
-          </div>
-          
-          <button type="submit" class="btn btn-success">Save Profile</button>
-        </form>
-      </div>
-      <div class="col-12">
-      </div>
+  .btn-success {
+    background-color: #5fd3f3;
+    border-color: #5fd3f3;
+    color: #000;
+    font-weight: 500;
+    border-radius: 30px;
+    padding: 0.5rem 2rem;
+  }
+
+  .btn-success:hover {
+    background-color: #38bde5;
+  }
+
+  .text-danger {
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 768px) {
+    .glass-card {
+      padding: 1.5rem;
+    }
+
+    .btn-success {
+      width: 100%;
+    }
+  }
+</style>
+<div class="mt-5 pt-4">
+<h1 class="display-5 text-center my-5 text-info ">Edit Profile</h1>
+
+<div class="container col-lg-6 px-4 px-md-5 ">
+  <div class="glass-card">
+
+    <div class="text-center mb-4">
+      <img src="{{ user_profile.profile_image.url }}" alt="profile-pic" width="120" height="120" class="rounded-circle border border-info">
     </div>
+
+    {% for message in messages %}
+      <h5 class="text-danger text-center">{{ message }}</h5>
+    {% endfor %}
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="exampleInputImage" class="form-label">Profile Image</label>
+        <input type="file" name="profile_image" class="form-control" id="exampleInputImage">
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputFirstName" class="form-label">First Name</label>
+        <input type="text" name="first_name" value="{{ user_profile.user.first_name }}" class="form-control" id="exampleInputFirstName" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputLastName" class="form-label">Last Name</label>
+        <input type="text" name="last_name" value="{{ user_profile.user.last_name }}" class="form-control" id="exampleInputLastName" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputEmail2" class="form-label">Email</label>
+        <input type="email" name="email" value="{{ user_profile.user.email }}" class="form-control" id="exampleInputEmail2" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputUsername1" class="form-label">Username</label>
+        <input type="text" name="username" value="{{ user_profile.user.username }}" class="form-control" id="exampleInputUsername1" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputLocation" class="form-label">Location</label>
+        <input type="text" name="location" value="{{ user_profile.location }}" class="form-control" id="exampleInputLocation" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputGender" class="form-label">Gender</label>
+        <select class="form-select" name="gender" id="exampleInputGender" required>
+          <option disabled>Choose Your Gender</option>
+          <option value="Male" {% if user_profile.gender == 'Male' %} selected {% endif %}>Male</option>
+          <option value="Female" {% if user_profile.gender == 'Female' %} selected {% endif %}>Female</option>
+          <option value="Other" {% if user_profile.gender == 'Other' %} selected {% endif %}>Other</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="exampleFormControlTextarea1" class="form-label">Your Bio</label>
+        <textarea class="form-control" name="bio" id="exampleFormControlTextarea1" rows="3" required>{{ user_profile.bio }}</textarea>
+      </div>
+
+      <div class="text-center d-flex justify-content-center gap-3">
+        <a href="{% url 'profile' request.user.username %}" class="btn btn-outline-light">Cancel</a>
+  <button type="submit" class="btn btn btn-outline-info">Save Profile</button>
+  
+</div>
+
+    </form>
   </div>
+</div>
+</div>
 
 {% endblock content %}
