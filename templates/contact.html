@@ -1,35 +1,56 @@
 {% extends 'index.html' %}
-{% block title %}Contact Us{% endblock title%}
+{% block title %}Contact Us{% endblock title %}
 {% block content %}
+<style>
+	body {
+    background-color: #0f172a; /* Very dark blue-grey */
+    color: #e2e8f0; /* Light grey text */
+}
 
-<h1 class="display-4 text-center my-5">Contact Us</h1>
+.btn-outline-primary {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
 
-	<main>
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6">
-					<form action="" method="post" class="contact-form">
-						{% csrf_token %}
-						<div class="form-group mb-4">
-							<label for="username">Username</label>
-							<input type="text" id="username" name="username" value="{{request.user.username}}" class="form-control"
-								disabled>
-						</div>
+.btn-outline-primary:hover {
+    background-color: #3b82f6;
+    color: white;
+}
 
-						<div class="form-group mb-4">
-							<label for="subject">Subject</label>
-							<input type="text" id="subject" name="subject" required class="form-control">
-						</div>
+</style>
 
-						<div class="form-group mb-4">
-							<label for="message">Message</label>
-							<textarea id="message" name="message" rows="5" required class="form-control"></textarea>
-						</div>
+<h1 class="display-4 text-center text-white mb-4 mt-5 pt-5">Contact Us</h1>
 
-						<button type="submit" class="btn btn-primary btn-block">Send Message</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</main>
-    {% endblock content %}
+
+<main>
+    <div class="container mb-5 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 bg-dark text-white p-5 rounded shadow-lg" style="background-color: #1f2a37;">
+                <form action="" method="post" class="contact-form">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                        <label for="username" class="form-label text-light">Username</label>
+                        <input type="text" id="username" name="username" value="{{ request.user.username }}"
+                               class="form-control bg-secondary text-white border-0" disabled>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="subject" class="form-label text-light">Subject</label>
+                        <input type="text" id="subject" name="subject" required
+                               class="form-control bg-secondary text-white border-0">
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="message" class="form-label text-light">Message</label>
+                        <textarea id="message" name="message" rows="5" required
+                                  class="form-control bg-secondary text-white border-0"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-primary w-100">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
