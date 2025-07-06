@@ -16,13 +16,9 @@
   }
 
   .card-glass {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    padding: 2rem;
-    margin: 1rem auto;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better readability */
+        padding: 2rem;
+        border-radius: 12px;
   }
 
   .profile-img {
@@ -72,10 +68,10 @@
   {% endif %}
 
   <div class="row justify-content-center">
-    <div class="col-md-4 text-center">
+    <div class="col-md-4 text-center ">
       <img src="{{ user_profile2.profile_image.url }}" alt="user profile" class="profile-img mb-3">
     </div>
-    <div class="col-md-6 card-glass profile-data">
+    <div class="col-md-6 card-glass profile-data md-4">
       <h2>{{ user_profile2.full_name }}</h2>
       <p><strong>Gender:</strong> {{ user_profile2.gender }}</p>
       <p><i class="bi bi-geo-alt-fill"></i> {{ user_profile2.location }}</p>
@@ -86,7 +82,7 @@
     </div>
   </div>
 
-  <div class="card-glass">
+  <div class="card-glass mt-4">
     <h3 class="section-title">Quizzes Attended by @{{ user_profile2.user.username }}</h3>
     <div class="table-responsive">
       <table class="table table-hover quiz-table">

@@ -5,25 +5,20 @@
 
 <style>
   body {
-    background-color: #1b1f29;
+    background-image: url("{% static 'images/bgwelcome.png' %}");
     color: #eaeaea;
   }
 
   .dashboard-wrapper {
-    background-color: #1b1f29;
+    background-image: url("{% static 'images/bgwelcome.png' %}");
     min-height: 100vh;
     padding: 2rem 1rem;
   }
 
   .card-glass {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #eaeaea;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better readability */
+        padding: 2rem;
+        border-radius: 12px;
   }
 
   .card-glass h1,
