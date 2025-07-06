@@ -4,7 +4,7 @@ from .models import Message
 # Create your tests here.
 class MessageModelTest(TestCase):
      def setUp(self):
-          self.user=User.objcts.create_user(username='testuser',password='testpass')
+          self.user=User.objects.create_user(username='testuser',password='testpass')
           self.message=Message.objects.create(
                user=self.user,
                subject='Message subject',
@@ -13,7 +13,7 @@ class MessageModelTest(TestCase):
           
      def test_message_creation(self):
           #test if equal
-          self.assertEqual(self.message.User,self.user)
+          self.assertEqual(self.message.user,self.user)
           self.assertEqual(self.message.subject,'Message subject')
           self.assertEqual(self.message.message,'this is my message')
           
