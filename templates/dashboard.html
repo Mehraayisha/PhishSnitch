@@ -1,127 +1,185 @@
-{% extends 'index.html'%}
-{% block title %}Dashboard - PhishSnitch{% endblock title%}
+{% extends 'index.html' %}
+{% block title %}Dashboard - PhishSnitch{% endblock title %}
+{% load static %}
 {% block content %}
+
 <style>
-    body {
-        background-color: #1b1f29;
-    }
+  body {
+    background-color: #1b1f29;
+    color: #eaeaea;
+  }
 
-    .glass-card {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 15px;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-        color: #f1f3f5;
-        border: 1px solid rgba(255, 255, 255, 0.125);
-    }
+  .dashboard-wrapper {
+    background-color: #1b1f29;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
 
-    .glass-card .card-body {
-        padding: 1.5rem;
-    }
+  .card-glass {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #eaeaea;
+  }
 
-    .glass-table {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    }
+  .card-glass h1,
+  .card-glass p,
+  .card-glass .list-group-item {
+    color: #eaeaea;
+  }
 
-    .glass-table th, .glass-table td {
-        color: #f8f9fa;
-        background-color: transparent !important;
-    }
+  .list-group-item {
+    background-color: transparent;
+    border: none;
+  }
 
-    .glass-table thead th {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    }
+  .display-4 {
+    color: #5fd3f3;
+    text-shadow: 0 0 8px rgba(95, 211, 243, 0.4);
+  }
 
-    .glass-table tbody tr.table-light {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-    }
+  .badge.bg-primary {
+    background-color: #5fd3f3 !important;
+    color: black;
+  }
 
-    .glass-table tbody tr.table-active {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-    }
+  .table.glass-table {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
 
-    .display-4 {
-        color: #5fd3f3;
-        text-shadow: 0 0 10px rgba(95, 211, 243, 0.5);
-    }
+  .glass-table th,
+  .glass-table td {
+    color: #ddd;
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
 
-    .badge.bg-primary {
-        background-color: #5fd3f3 !important;
-        color: black;
-    }
+  .glass-table tbody tr.table-light {
+    background-color: rgba(255, 255, 255, 0.07) !important;
+  }
 
-    .card-text {
-        font-size: 1.1rem;
-    }
+  .glass-table tbody tr.table-active {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .btn-sm.btn-primary {
+    background-color: #5fd3f3;
+    border: none;
+    color: #000;
+  }
+
+  .btn-sm.btn-primary:hover {
+    background-color: #4cb8dc;
+  }
+
 </style>
 
-<h1 class="display-4 text-center my-5">Dashboard</h1>
+<div class="dashboard-wrapper">
+  <h1 class="display-4 text-center fw-bold mb-5 pt-5">Dashboard</h1>
 
-<div class="container">
+  <div class="container">
     <div class="row">
-        {% for card in [
-            {'count': total_users, 'label': 'Active Users', 'today': today_users, 'gain': gain_users},
-            {'count': total_quizzes, 'label': 'Quizzes', 'today': today_quizzes, 'gain': gain_quizzes},
-            {'count': total_quiz_submit, 'label': 'Submissions', 'today': today_quiz_submit, 'gain': gain_quiz_submit},
-            {'count': total_questions, 'label': 'Questions', 'today': today_questions, 'gain': gain_questions},
-        ] %}
-        <div class="col-sm-6 col-lg-3 mb-4">
-            <div class="card glass-card h-100">
-                <div class="card-body text-center mt-3">
-                    <h1 class="card-title pricing-card-title">{{ card.count }}</h1>
-                    <p class="card-text">{{ card.label }}</p>
-                    <ul class="list-group mt-4">
-                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0">
-                            Today
-                            <span class="badge bg-primary rounded-pill">{{ card.today }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0">
-                            Gain %
-                            <span class="badge bg-primary rounded-pill">{{ card.gain|default:0 }}</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+      <div class="col-sm-3">
+        <div class="card-glass text-center">
+          <h1>{{ total_users }}</h1>
+          <p>Active Users</p>
+          <ul class="list-group mt-4">
+            <li class="list-group-item d-flex justify-content-between">
+              Today <span class="badge bg-primary rounded-pill">{{ today_users }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              Gain % <span class="badge bg-primary rounded-pill">{{ gain_users|default:0 }}</span>
+            </li>
+          </ul>
         </div>
-        {% endfor %}
+      </div>
+      <div class="col-sm-3">
+        <div class="card-glass text-center">
+          <h1>{{ total_quizzes }}</h1>
+          <p>Quizzes</p>
+          <ul class="list-group mt-4">
+            <li class="list-group-item d-flex justify-content-between">
+              Today <span class="badge bg-primary rounded-pill">{{ today_quizzes }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              Gain % <span class="badge bg-primary rounded-pill">{{ gain_quizzes|default:0 }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="card-glass text-center">
+          <h1>{{ total_quiz_submit }}</h1>
+          <p>Submissions</p>
+          <ul class="list-group mt-4">
+            <li class="list-group-item d-flex justify-content-between">
+              Today <span class="badge bg-primary rounded-pill">{{ today_quiz_submit }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              Gain % <span class="badge bg-primary rounded-pill">{{ gain_quiz_submit|default:0 }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="card-glass text-center">
+          <h1>{{ total_questions }}</h1>
+          <p>Questions</p>
+          <ul class="list-group mt-4">
+            <li class="list-group-item d-flex justify-content-between">
+              Today <span class="badge bg-primary rounded-pill">{{ today_questions }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              Gain % <span class="badge bg-primary rounded-pill">{{ gain_questions|default:0 }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div class="row">
-        <div class="col-12 mb-5">
-            <h2 class="text-center text-light my-4">Inbox</h2>
-            <div class="glass-table p-3">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>User</th>
-                            <th>Subject</th>
-                            <th>Time</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for message in messages %}
-                        <tr class="{% if not message.is_read %}table-light{% else %}table-active{% endif %}">
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td><a class="text-decoration-none text-info" href="{% url 'profile' message.user.username %}">{{ message.user.username }}</a></td>
-                            <td>{{ message.subject }}</td>
-                            <td>{{ message.created_at }}</td>
-                            <td><a href="{% url 'message' message.id %}" class="btn btn-sm btn-outline-light">Open</a></td>
-                        </tr>
-                        {% empty %}
-                        <tr><td colspan="5" class="text-center text-light">No messages available.</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    <div class="row mt-5">
+      <div class="col-12">
+        <div class="card-glass">
+          <h2 class="text-center mb-4">Inbox</h2>
+          <div class="table-responsive">
+            <table class="table glass-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>User</th>
+                  <th>Subject</th>
+                  <th>Time</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for message in messages %}
+                  <tr class="{% if not message.is_read %}table-light{% else %}table-active{% endif %}">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a href="{% url 'profile' message.user.username %}" class="text-info text-decoration-none">{{ message.user.username }}</a></td>
+                    <td>{{ message.subject }}</td>
+                    <td>{{ message.created_at }}</td>
+                    <td><a href="{% url 'message' message.id %}" class="btn btn-sm btn-primary">Open</a></td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="5" class="text-center text-light">No messages available.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
+
 {% endblock content %}
