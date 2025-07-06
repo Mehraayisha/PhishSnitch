@@ -17,12 +17,19 @@ class Category(models.Model):
 
 
 class Quiz(models.Model):
+    MODE_CHOICES = [
+        ('PRACTICE', 'Practice (MCQ)'),
+        ('TIMED', 'Timed (MCQ)'),
+        ('TF', 'True/False'),
+    ]
     title = models.CharField(max_length=255)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     
     quiz_file = models.FileField(upload_to='quiz/')
     created_at = models.DateTimeField(auto_now_add=True)
+    mode = models.CharField(max_length=10, choices=MODE_CHOICES, default='PRACTICE')
+    
     uploaded_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -33,6 +40,7 @@ class Quiz(models.Model):
 
 
 class Question(models.Model):
+    
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     text = models.TextField()
 
@@ -48,6 +56,7 @@ class Choice(models.Model):
     def __str__(self):
         return f"{self.question.text[:50]}, {self.text[:20]}"
     
+
 
 
 @receiver(post_save, sender=Quiz)
