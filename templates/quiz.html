@@ -80,6 +80,17 @@
         </div>
         <div class="card-body">
           <p class="card-text">{{ question.text }}</p>
+    {% if quiz.mode == "TF" %}  
+         <!-- Only show 2 options -->
+    {% for option in question.choice_set.all %}
+      <div class="form-check">
+        <label class="form-check-label" for="{{ option.id }}">
+          <input class="form-check-input" type="radio" name="{{ option.question.id }}" id="{{ option.id }}" value="{{ option.text }}">
+          {{ option.text }}
+        </label>
+      </div>
+    {% endfor %}
+    {% else %}
           {% for option in question.choice_set.all %}
           <div class="form-check">
             <label class="form-check-label" for="{{ option.id }}">
@@ -91,9 +102,12 @@
             {% endif %}
           </div>
           {% endfor %}
+          {% endif %}
         </div>
       </div>
+     
       {% endfor %}
+      
     </div>
 
     <form action="" method="post" id="quiz-form">

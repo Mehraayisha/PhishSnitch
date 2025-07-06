@@ -58,9 +58,40 @@ class Choice(models.Model):
     
 
 
-
 @receiver(post_save, sender=Quiz)
 def import_quiz_after_save(sender, instance, created, **kwargs):
+    if instance.quiz_file:
+        try:
+            df = pd.read_excel(instance.quiz_file.path)
+            df.columns = df.columns.str.strip()
+
+            for _, row in df.iterrows():
+                question_text = row['Question']
+                correct_answer = str(row['Answer']).strip().upper()
+
+                question, _ = Question.objects.get_or_create(
+                    quiz=instance,
+                    text=question_text
+                )
+
+                # Remove old choices to avoid duplicates
+                Choice.objects.filter(question=question).delete()
+
+                # TF Mode
+                if instance.mode == 'TF':
+                    Choice.objects.create(question=question, text=row['A'], is_correct=correct_answer == 'A')
+                    Choice.objects.create(question=question, text=row['B'], is_correct=correct_answer == 'B')
+
+                # MCQ Modes (practice or timed)
+                else:
+                    Choice.objects.create(question=question, text=row['A'], is_correct=correct_answer == 'A')
+                    Choice.objects.create(question=question, text=row['B'], is_correct=correct_answer == 'B')
+                    Choice.objects.create(question=question, text=row['C'], is_correct=correct_answer == 'C')
+                    Choice.objects.create(question=question, text=row['D'], is_correct=correct_answer == 'D')
+
+        except Exception as e:
+            print("Error while importing quiz:", e)
+
     if instance.quiz_file:
         try:
             #  print("Importing questions from Excel...")
