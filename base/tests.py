@@ -10,3 +10,14 @@ class MessageModelTest(TestCase):
                subject='Message subject',
                message='this is my message'
           )
+          
+     def test_message_creation(self):
+          #test if equal
+          self.assertEqual(self.message.User,self.user)
+          self.assertEqual(self.message.subject,'Message subject')
+          self.assertEqual(self.message.message,'this is my message')
+          
+          #test if false
+          self.assertFalse(self.message.is_read)
+          #test if not none
+          self.assertIsNotNone(self.message.created_at)
