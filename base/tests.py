@@ -21,3 +21,7 @@ class MessageModelTest(TestCase):
           self.assertFalse(self.message.is_read)
           #test if not none
           self.assertIsNotNone(self.message.created_at)
+
+     def test_str_representation(self):
+          self.assertEqual(str(self.message),f"{self.user.username},{self.message.subject}")
+          
