@@ -58,14 +58,14 @@ class Choice(models.Model):
     
 
 
-@receiver(post_save, sender=Quiz)
+@receiver(post_save, sender=Quiz)#call this function everytime a sender(Quiz) object is created
 def import_quiz_after_save(sender, instance, created, **kwargs):
     if instance.quiz_file:
         try:
             df = pd.read_excel(instance.quiz_file.path)
-            df.columns = df.columns.str.strip()
+            df.columns = df.columns.str.strip()#remove the whitespace in begining and end of all the columns in df
 
-            for _, row in df.iterrows():
+            for _, row in df.iterrows():#_ is used to ignore the index(iterrow returns index and row value)
                 question_text = row['Question']
                 correct_answer = str(row['Answer']).strip().upper()
 
