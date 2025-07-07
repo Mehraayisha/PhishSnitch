@@ -3,6 +3,7 @@ from .models import Quiz,Question,Choice,Category
 import pandas as pd
 import io
 from django.core.files.uploadedfile import SimpleUploadedFile
+from unittest.mock import patch
 # Create your tests here.
 class QuizModelTest(TestCase):
     def setUp(self):
@@ -24,3 +25,18 @@ class QuizModelTest(TestCase):
             category=self.category,
             quiz_file=self.uploaded_file
         )
+    @patch('quiz.models.pd.read_excel')
+    def test_import_quiz_from_excel(self,mock_read_excel_file):
+        mock_df=pd.DataFrame({
+            'Question':['What is 2+1?','What is 3+5?'],
+            'A':['2','1'],
+            'B':['3','8'],
+            'C':['5','2'],
+            'D':['1','4'],
+            'Answer':['B','B']
+        })
+        mock_read_excel_file.return_value=mock_df
+        self.assertEqual(self.category,"AI")
+        self.assertEqual(self.quiz.name,'Quiz title')
+        self.assertEqual(self.quiz.description,'Quiz dec')
+
