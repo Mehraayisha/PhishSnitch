@@ -72,7 +72,7 @@ def import_quiz_after_save(sender, instance, created, **kwargs):
                 question, _ = Question.objects.get_or_create(
                     quiz=instance,
                     text=question_text
-                )
+                )#get_or_create return 2 values question obj and created flag we only need question so _ is used to ignore the second
 
                 # Remove old choices to avoid duplicates
                 Choice.objects.filter(question=question).delete()
@@ -92,29 +92,7 @@ def import_quiz_after_save(sender, instance, created, **kwargs):
         except Exception as e:
             print("Error while importing quiz:", e)
 
-    if instance.quiz_file:
-        try:
-            #  print("Importing questions from Excel...")
-            df = pd.read_excel(instance.quiz_file.path)
-            df.columns = df.columns.str.strip()  # Strip any spaces
-
-            for _, row in df.iterrows():
-                question_text = row['Question']
-                choice1 = row['A']
-                choice2 = row['B']
-                choice3 = row['C']
-                choice4 = row['D']
-                correct_answer = str(row['Answer']).strip().upper()
-
-                question, _ = Question.objects.get_or_create(quiz=instance, text=question_text)
-
-                Choice.objects.get_or_create(question=question, text=choice1, is_correct=correct_answer == 'A')
-                Choice.objects.get_or_create(question=question, text=choice2, is_correct=correct_answer == 'B')
-                Choice.objects.get_or_create(question=question, text=choice3, is_correct=correct_answer == 'C')
-                Choice.objects.get_or_create(question=question, text=choice4, is_correct=correct_answer == 'D')
-
-        except Exception as e:
-            print("Error while importing quiz:", e)
+    
 
 
 
