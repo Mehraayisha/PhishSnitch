@@ -47,6 +47,7 @@ class QuizModelTest(TestCase):
         self.assertEqual(Choice.objects.filter(question=question1).count(),4)
         self.assertEqual(Choice.objects.filter(question=question2).count(),4)
 
-    
+    def test_plural_quizzes(self):
+        self.assertEqual(str(Quiz._meta.verbose_name_plural),'Quizzes')
         
 
