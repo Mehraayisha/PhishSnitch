@@ -21,6 +21,8 @@ class Quiz(models.Model):
         ('PRACTICE', 'Practice (MCQ)'),
         ('TIMED', 'Timed (MCQ)'),
         ('TF', 'True/False'),
+        ('SCENARIO', 'Scenario Based'),
+
     ]
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -42,6 +44,7 @@ class Quiz(models.Model):
 class Question(models.Model):
     
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    scenario=models.TextField(null=True,blank=True)
     text = models.TextField()
 
     def __str__(self):
@@ -68,10 +71,11 @@ def import_quiz_after_save(sender, instance, created, **kwargs):
             for _, row in df.iterrows():#_ is used to ignore the index(iterrow returns index and row value)
                 question_text = row['Question']
                 correct_answer = str(row['Answer']).strip().upper()
-
+                scenario_text=row.get('Scenario',None) if instance.mode=='SCENARIO' else None
                 question, _ = Question.objects.get_or_create(
                     quiz=instance,
-                    text=question_text
+                    text=question_text,
+                    scenario=scenario_text
                 )#get_or_create return 2 values question obj and created flag we only need question so _ is used to ignore the second
 
                 # Remove old choices to avoid duplicates

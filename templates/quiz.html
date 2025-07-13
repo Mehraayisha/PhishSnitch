@@ -78,6 +78,9 @@
       <div class="card mb-3 question">
         <div class="card-header fw-bold">Question-{{ forloop.counter }}</div>
         <div class="card-body">
+          {% if question.scenario %}
+          <p class="card-text fst-italic text-info">Scenario: {{question.scenario }}</p>
+          {% endif %}
           <p class="card-text">{{ question.text }}</p>
           {% if quiz.mode == "TF" %}
           <!-- Only show 2 options -->
