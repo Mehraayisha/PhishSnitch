@@ -65,26 +65,26 @@
         </div>
       </form>
 
-      {% if result %}
-        <div class="breach-results mt-4">
-          <h4 class="text-info">Results:</h4>
-          {% if result|length > 0 %}
-            <ul class="list-unstyled">
-              {% for item in result %}
-                <li>
-                  <strong>{{ item.name }}</strong> — {{ item.leak }}
-                </li>
-              {% endfor %}
-            </ul>
-          {% else %}
-            <p class="text-success">✅ No breaches found for this identifier.</p>
-          {% endif %}
-        </div>
-      {% elif error %}
-        <div class="breach-results mt-4">
-          <p class="text-danger">⚠️ {{ error }}</p>
-        </div>
-      {% endif %}
+ {% if result.found %}
+  <h3 class="mt-3"> ! Breaches Found: {{ result.found }}</h3>
+
+  <h4>Exposed Fields:</h4>
+  <ul>
+    {% for field in result.fields %}
+      <li>{{ field }}</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Sources:</h4>
+  <ul>
+    {% for source in result.sources %}
+      <li>{{ source.name }} - {{ source.date }}</li>
+    {% endfor %}
+  </ul>
+{% elif result %}
+  <p>No breaches found.</p>
+{% endif %}
+
     </div>
   </div>
 </div>

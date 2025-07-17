@@ -11,7 +11,8 @@ from django.contrib import messages
 from django.db.models.functions import ExtractYear
 import requests
 from django.shortcuts import render
-from decouple import config
+import os
+from django.conf import settings
 from django.contrib import messages
 
 
@@ -131,38 +132,31 @@ def custom_404(request,exception):
 
 
 def breach_checker(request):
-    result = []
+    result = {}
     error = None
 
     if request.method == 'POST':
         query = request.POST.get('query', '').strip()
-        if query:
-            email = config('DEHASHED_API_EMAIL')
-            api_key = config('DEHASHED_API_KEY')
 
-            url = 'https://api.dehashed.com/search'
-            params = {
-                'query': query,
-                'size': 10  # optional: limit results
-            }
+        if query:
+            url = f"https://leakcheck.io/api/public?check={query}"
 
             try:
-                response = requests.get(url, params=params, auth=(email, api_key))
+                response = requests.get(url)
+
                 if response.status_code == 200:
                     data = response.json()
-                    entries = data.get('entries', [])
 
-                    if entries:
-                        for entry in entries:
-                            result.append({
-                                'name': entry.get('name') or entry.get('email') or 'Unknown',
-                                'leak': entry.get('password') or 'No password found',
-                            })
+                    if data.get('success'):
+                        result = {
+                            'found': data.get('found'),
+                            'fields': data.get('fields', []),
+                            'sources': data.get('sources', [])
+                        }
                     else:
-                        result = []
+                        error = "No breaches found or API returned an error."
                 else:
-                    error = f"API Error {response.status_code}: {response.text}"
-
+                    error = f"LeakCheck API Error {response.status_code}: {response.text}"
             except Exception as e:
                 error = f"Something went wrong: {str(e)}"
 
