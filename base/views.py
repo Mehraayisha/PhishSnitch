@@ -143,20 +143,21 @@ def breach_checker(request):
 
             try:
                 response = requests.get(url)
-
                 if response.status_code == 200:
                     data = response.json()
 
-                    if data.get('success'):
+                    if data.get('success') and data.get('found', 0) > 0:
                         result = {
                             'found': data.get('found'),
                             'fields': data.get('fields', []),
                             'sources': data.get('sources', [])
                         }
+                    elif data.get('success') and data.get('found', 0) == 0:
+                        error = "✅ Your email was not found in any known breaches. You're safe!"
                     else:
-                        error = "No breaches found or API returned an error."
+                        error = "⚠️ Email not found in database or unknown error."
                 else:
-                    error = f"LeakCheck API Error {response.status_code}: {response.text}"
+                    error = f"API Error {response.status_code}: {response.text}"
             except Exception as e:
                 error = f"Something went wrong: {str(e)}"
 
