@@ -1,0 +1,92 @@
+{% extends 'index.html' %}
+{% block title %}Breach Checker - PhishSnitch{% endblock title %}
+{% load static %}
+{% block content %}
+
+<style>
+  .breach-wrapper {
+    background-image: url("{% static 'images/bgwelcome.png' %}");
+    background-size: cover;
+    color: #eaeaea;
+    min-height: 100vh;
+    padding-top: 4rem;
+    margin: 0;
+    width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .card-glass {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 12px;
+  }
+
+  .form-control,
+  .btn {
+    border-radius: 30px;
+  }
+
+  .breach-results {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+  }
+
+  .breach-results li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .breach-results li:last-child {
+    border-bottom: none;
+  }
+</style>
+
+<div class="w-100 breach-wrapper px-4 px-md-5">
+  <h1 class="display-5 text-center mb-4">🔍 Breach Checker</h1>
+
+  {% if messages %}
+    {% for message in messages %}
+      <h5 class="text-{{ message.tags }} text-center">{{ message }}</h5>
+    {% endfor %}
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-md-8 card-glass">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="query" class="form-label">Enter Email or Username</label>
+          <input type="text" name="query" id="query" class="form-control" required placeholder="example@domain.com">
+        </div>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-outline-info">Check Now</button>
+        </div>
+      </form>
+
+      {% if result %}
+        <div class="breach-results mt-4">
+          <h4 class="text-info">Results:</h4>
+          {% if result|length > 0 %}
+            <ul class="list-unstyled">
+              {% for item in result %}
+                <li>
+                  <strong>{{ item.name }}</strong> — {{ item.leak }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-success">✅ No breaches found for this identifier.</p>
+          {% endif %}
+        </div>
+      {% elif error %}
+        <div class="breach-results mt-4">
+          <p class="text-danger">⚠️ {{ error }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

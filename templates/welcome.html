@@ -217,55 +217,35 @@
 
     
     <div class="container-fluid left-content mb-3 py-5">
-    <h2 class="text-center text-white">Leaderboard</h2>
+    
     <div class="card mb-3 mx-auto g-0" style="max-width: 800px;">
 
       <!-- Leaderboard content here -->
           <div class="row row-cols-1 row-cols-md-3">
   {% if leaderboard_users|length == 0 %}
     <div class="col-12 text-center text-danger py-4">
-      <h4>No Users Available on leaderboard</h4>
+      
     </div>
   {% else %}
     {# Explicitly get each position #}
     <!-- 2nd Place (Left) -->
-    <div class="col border-end p-3">
-      <div class="pedestal place2">
-        <div class="pedestal-user">2</div>
-        <div class="pedestal-info">
-          <strong>{{ leaderboard_users.1.user.username }}</strong>
-          <div>{{ leaderboard_users.1.user.profile.bio|truncatewords:5 }}</div>
-        </div>
-        <div class="pedestal-base"></div>
-        <p><a class="btn btn-outline-secondary mt-3" href="{% url 'profile' leaderboard_users.0.user.username %}">View Profile »</a></p> 
-      </div>
-    </div>
+     <!-- 2nd Place (Left) -->
+<div class="col text-center py-4">
+  <div class=" text-white p-4 rounded shadow" style="font-family: 'Courier New', monospace;">
+    <h4 class="fw-bold">Check Breached Data</h4>
+    <p class="mb-3">Ensure your credentials are safe</p>
+    <a href="{% url 'breach_checker' %}" class="btn btn-outline-light rounded-pill px-4 py-2">
+      Go to Breach Checker
+    </a>
+  </div>
+</div>
+
 
     <!-- 1st Place (Middle) -->
-    <div class="col border-end p-3">
-      <div class="pedestal place1">
-        <div class="pedestal-user">1</div>
-        <div class="pedestal-info">
-          <strong>{{ leaderboard_users.0.user.username }}</strong>
-          <div>{{ leaderboard_users.0.user.profile.bio|truncatewords:5 }}</div>
-        </div>
-        <div class="pedestal-base"></div>
-        <p><a class="btn btn-outline-warning mt-3" href="{% url 'profile' leaderboard_users.0.user.username %}">View Profile »</a></p> 
-      </div>
-    </div>
+    
 
     <!-- 3rd Place (Right) -->
-    <div class="col p-3">
-      <div class="pedestal place3">
-        <div class="pedestal-user">3</div>
-        <div class="pedestal-info">
-          <strong>{{ leaderboard_users.2.user.username }}</strong>
-          <div>{{ leaderboard_users.2.user.profile.bio|truncatewords:5 }}</div>
-        </div>
-        <div class="pedestal-base"></div>
-        <p><a class="btn btn-outline-danger mt-3" href="{% url 'profile' leaderboard_users.0.user.username %}">View Profile »</a></p> 
-      </div>
-    </div>
+   
   {% endif %}
 </div>
 

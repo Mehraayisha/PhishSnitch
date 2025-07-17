@@ -9,6 +9,10 @@ from django.db.models import Count,Q
 from .models import Message,Blog
 from django.contrib import messages
 from django.db.models.functions import ExtractYear
+import requests
+from django.shortcuts import render
+from decouple import config
+from django.contrib import messages
 
 
 def home(request):
@@ -124,3 +128,45 @@ def search_users_view(request):
     return render(request,"search-user.html",context)
 def custom_404(request,exception):
     return render(request,'404.html',status=404)
+
+
+def breach_checker(request):
+    result = []
+    error = None
+
+    if request.method == 'POST':
+        query = request.POST.get('query', '').strip()
+        if query:
+            email = config('DEHASHED_API_EMAIL')
+            api_key = config('DEHASHED_API_KEY')
+
+            url = 'https://api.dehashed.com/search'
+            params = {
+                'query': query,
+                'size': 10  # optional: limit results
+            }
+
+            try:
+                response = requests.get(url, params=params, auth=(email, api_key))
+                if response.status_code == 200:
+                    data = response.json()
+                    entries = data.get('entries', [])
+
+                    if entries:
+                        for entry in entries:
+                            result.append({
+                                'name': entry.get('name') or entry.get('email') or 'Unknown',
+                                'leak': entry.get('password') or 'No password found',
+                            })
+                    else:
+                        result = []
+                else:
+                    error = f"API Error {response.status_code}: {response.text}"
+
+            except Exception as e:
+                error = f"Something went wrong: {str(e)}"
+
+    return render(request, 'breach_checker.html', {
+        'result': result,
+        'error': error
+    })
