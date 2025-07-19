@@ -1,18 +1,70 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Cybersecurity News</title>
-</head>
-<body>
-    <h1>🛡️ Latest Cybersecurity News</h1>
-    <ul>
+{% extends 'index.html' %}
+{% block title %}Cybersecurity News - PhishSnitch{% endblock title %}
+{% load static %}
+{% block content %}
+
+<style>
+  .news-wrapper {
+    background-image: url("{% static 'images/bgwelcome.png' %}");
+    background-size: cover;
+    color: #eaeaea;
+    min-height: 100vh;
+    padding-top: 4rem;
+    margin: 0;
+    width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .card-glass {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 12px;
+  }
+
+  .news-list li {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .news-list li:last-child {
+    border-bottom: none;
+  }
+
+  .news-title {
+    color: #5fd3f3;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .news-summary {
+    font-size: 0.95rem;
+    color: #ccc;
+  }
+
+  .news-date {
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+</style>
+
+<div class="w-100 news-wrapper px-4 px-md-5">
+  <h1 class="display-5 text-center mb-4">🛡️ Cybersecurity News</h1>
+
+  <div class="row justify-content-center">
+    <div class="col-md-10 card-glass">
+      <ul class="news-list list-unstyled">
         {% for item in news_items %}
-            <li>
-                <a href="{{ item.link }}" target="_blank"><strong>{{ item.title }}</strong></a><br>
-                <small>{{ item.published }}</small><br>
-                <p>{{ item.summary|safe }}</p>
-            </li>
+          <li>
+            <a href="{{ item.link }}" target="_blank" class="news-title">{{ item.title }}</a><br>
+            <span class="news-date">{{ item.published }}</span>
+            <p class="news-summary">{{ item.summary|safe }}</p>
+          </li>
+        {% empty %}
+          <li>No news found at the moment. Please check back later.</li>
         {% endfor %}
-    </ul>
-</body>
-</html>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
