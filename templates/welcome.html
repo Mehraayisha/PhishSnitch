@@ -228,7 +228,7 @@
     </div>
   {% else %}
     {# Explicitly get each position #}
-    <!-- 2nd Place (Left) -->
+   
      <!-- 2nd Place (Left) -->
 <div class="col text-center py-4">
   <div class=" text-white p-4 rounded shadow" style="font-family: 'Courier New', monospace;">
@@ -243,7 +243,15 @@
 
     <!-- 1st Place (Middle) -->
     
-
+ <div class="col text-center py-4">
+  <div class=" text-white p-4 rounded shadow" style="font-family: 'Courier New', monospace;">
+    <h4 class="fw-bold">Latest cybersecurity News</h4>
+    <p class="mb-3">Stay updated with the latest cybersecurity news & alerts.</p>
+    <a href="{% url 'cyber-news' %}" class="btn btn-outline-light rounded-pill px-4 py-2">
+      Go to Cyber News
+    </a>
+  </div>
+</div>
     <!-- 3rd Place (Right) -->
    
   {% endif %}

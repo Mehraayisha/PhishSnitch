@@ -15,5 +15,5 @@ urlpatterns =[
   path('contact',views.contact_view,name='contact'),
   path('blogs/<str:blog_id>',views.blog_view,name='blogs'),
   path('breachchecker',views.breach_checker,name='breach_checker'),
-  path('cyber-news/', views.cyber_news_view, name='cyber_news'),
+  path('cyber-news/', views.cyber_news_view, name='cyber-news'),
  ]
