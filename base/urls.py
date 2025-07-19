@@ -14,5 +14,6 @@ urlpatterns =[
   path('terms_and_conditions',views.terms_conditions_view,name='terms_and_conditions'),
   path('contact',views.contact_view,name='contact'),
   path('blogs/<str:blog_id>',views.blog_view,name='blogs'),
-  path('breachchecker',views.breach_checker,name='breach_checker')
+  path('breachchecker',views.breach_checker,name='breach_checker'),
+  path('cyber-news/', views.cyber_news_view, name='cyber_news'),
  ]

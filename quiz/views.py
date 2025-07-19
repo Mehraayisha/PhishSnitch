@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from accounts.models import Profile
 from .models import Quiz,Category,QuizSubmission
 from django.contrib import messages
+
 # Create your views here.
 @login_required 
 def all_quiz_view(request):
@@ -54,3 +55,4 @@ def category_view(request):
 
     context = {"categories": categories, "query": query}
     return render(request, 'quiz_category.html', context)
+

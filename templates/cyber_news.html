@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cybersecurity News</title>
+</head>
+<body>
+    <h1>🛡️ Latest Cybersecurity News</h1>
+    <ul>
+        {% for item in news_items %}
+            <li>
+                <a href="{{ item.link }}" target="_blank"><strong>{{ item.title }}</strong></a><br>
+                <small>{{ item.published }}</small><br>
+                <p>{{ item.summary|safe }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

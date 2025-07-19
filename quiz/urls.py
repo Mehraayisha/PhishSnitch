@@ -6,5 +6,6 @@ urlpatterns =[
   path('search/<str:category>',views.search_view,name='search'),
   path('<int:quiz_id>',views.quiz_view,name='quiz'),
   path('<int:submission_id>/result/',views.quiz_result_view,name='quiz_result'),
+  
 
  ]

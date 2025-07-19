@@ -12,6 +12,8 @@ from django.db.models.functions import ExtractYear
 import requests
 from django.shortcuts import render
 import os
+import feedparser
+from django.shortcuts import render
 from django.conf import settings
 from django.contrib import messages
 
@@ -165,3 +167,17 @@ def breach_checker(request):
         'result': result,
         'error': error
     })
+def cyber_news_view(request):
+    rss_url = "https://www.darkreading.com/rss.xml"  # You can replace this
+    feed = feedparser.parse(rss_url)
+
+    news_items = []
+    for entry in feed.entries[:5]:  # Only showing 5 articles
+        news_items.append({
+            'title': entry.title,
+            'link': entry.link,
+            'published': entry.published,
+            'summary': entry.summary,
+        })
+
+    return render(request, 'cyber_news.html', {'news_items': news_items})
