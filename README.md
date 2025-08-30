@@ -1,4 +1,4 @@
-# 🐟 PhishSnitch – Cybersecurity Awareness App
+#  PhishSnitch – Cybersecurity Awareness App
 
 PhishSnitch is a full-stack web application aimed at enhancing cybersecurity awareness through interactive learning. It offers multiple quiz modes, a breach checker, and an intelligent chatbot to help users stay informed and protected in the digital world.
 
@@ -19,6 +19,14 @@ PhishSnitch is a full-stack web application aimed at enhancing cybersecurity awa
 - Check if your email has been involved in known data breaches
 - Secure, anonymous querying using [LeakCheck.io](https://leakcheck.io/)
 - Clear and human-friendly results
+
+### 📰 Latest Cybersecurity News
+
+- Stay updated with the latest security threats, patches, and research
+
+- Curated from trusted cybersecurity news sources
+
+- Real-time feed integrated into the platform
 
 ---
 
